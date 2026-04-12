@@ -3,6 +3,7 @@ package com.naphop.nestory.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.naphop.nestory.domain.model.Category
 
 @Entity(
     tableName = "category"
@@ -18,3 +19,16 @@ data class CategoryEntity(
     @ColumnInfo(name = "name")
     val name: String
 )
+
+fun CategoryEntity.toDomain() = Category(
+    id = id,
+    syncId = syncId,
+    name = name
+)
+
+fun Category.toEntity() = CategoryEntity(
+    id = id,
+    syncId = syncId,
+    name = name
+)
+
