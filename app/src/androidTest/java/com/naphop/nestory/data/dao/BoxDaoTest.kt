@@ -39,7 +39,8 @@ class BoxDaoTest{
     fun insertBox_andGetAll_returnsInsertedBox() = runTest {
         val box = BoxEntity(
             syncId = "uuid-1",
-            boxName = "Kitchen"
+            boxName = "Kitchen",
+            icon = ""
         )
 
         boxDao.insertBoxItem(box)
@@ -52,7 +53,8 @@ class BoxDaoTest{
     fun deleteBox_removeBoxFromDatabase() = runTest {
         val box = BoxEntity(
             syncId = "uuid-1",
-            boxName = "Kitchen"
+            boxName = "Kitchen",
+            icon = ""
         )
 
         boxDao.insertBoxItem(box)
@@ -69,7 +71,8 @@ class BoxDaoTest{
     fun updateBox_updatesBoxInDatabase() = runTest {
         val box = BoxEntity(
             syncId = "uuid-1",
-            boxName = "Kitchen"
+            boxName = "Kitchen",
+            icon = ""
         )
 
         boxDao.insertBoxItem(box)
@@ -85,7 +88,8 @@ class BoxDaoTest{
     fun getBoxById_returnsCorrectBox() = runTest {
         val box = BoxEntity(
             syncId = "uuid-1",
-            boxName = "Kitchen"
+            boxName = "Kitchen",
+            icon = ""
         )
 
         boxDao.insertBoxItem(box)

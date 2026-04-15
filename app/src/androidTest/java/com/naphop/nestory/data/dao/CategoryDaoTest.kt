@@ -38,7 +38,8 @@ class CategoryDaoTest{
     fun insertCategory_andGetAll_returnsInsertedCategory() = runTest {
         val category = CategoryEntity(
             syncId = "uuid-1",
-            name = "Garden"
+            name = "Garden",
+            icon = ""
         )
 
         categoryDao.insertCategoryItem(category)
@@ -51,7 +52,8 @@ class CategoryDaoTest{
     fun deleteCategory_removeCategoryFromDatabase() = runTest {
         val category = CategoryEntity(
             syncId = "uuid-1",
-            name = "Garden"
+            name = "Garden",
+            icon = ""
         )
 
         categoryDao.insertCategoryItem(category)
@@ -68,7 +70,8 @@ class CategoryDaoTest{
     fun updateCategory_updatesCategoryInDatabase() = runTest {
         val category = CategoryEntity(
             syncId = "uuid-1",
-            name = "Garden"
+            name = "Garden",
+            icon = ""
         )
 
         categoryDao.insertCategoryItem(category)
@@ -84,7 +87,8 @@ class CategoryDaoTest{
     fun getCategoryById_returnsCorrectCategory() = runTest {
         val category = CategoryEntity(
             syncId = "uuid-1",
-            name = "Garden"
+            name = "Garden",
+            icon = ""
         )
 
         categoryDao.insertCategoryItem(category)

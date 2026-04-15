@@ -46,13 +46,13 @@ class InventoryDaoTest {
     }
 
     private suspend fun insertCategory(): CategoryEntity {
-        val category = CategoryEntity(syncId = "cat-uuid-1", name = "Food")
+        val category = CategoryEntity(syncId = "cat-uuid-1", name = "Food",icon = "")
         categoryDao.insertCategoryItem(category)
         return categoryDao.getAllCategoryItems().first().first()
     }
 
     private suspend fun insertBox(): BoxEntity {
-        val box = BoxEntity(syncId = "box-uuid-1", boxName = "Kitchen")
+        val box = BoxEntity(syncId = "box-uuid-1", boxName = "Kitchen",icon = "")
         boxDao.insertBoxItem(box)
         return boxDao.getAllBoxItems().first().first()
     }
