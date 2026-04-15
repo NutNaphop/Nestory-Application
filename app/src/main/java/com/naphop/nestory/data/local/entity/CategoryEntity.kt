@@ -17,18 +17,22 @@ data class CategoryEntity(
     val syncId: String,
 
     @ColumnInfo(name = "name")
-    val name: String
+    val name: String,
+
+    @ColumnInfo(name = "icon")
+    val icon: String
 )
 
 fun CategoryEntity.toDomain() = Category(
     id = id,
     syncId = syncId,
-    name = name
+    name = name,
+    icon = icon
 )
 
 fun Category.toEntity() = CategoryEntity(
     id = id,
     syncId = syncId,
-    name = name
+    name = name,
+    icon = icon
 )
-

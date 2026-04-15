@@ -16,46 +16,43 @@ val RobotoFontFamily = FontFamily(
     Font(R.font.roboto_semibold, FontWeight.SemiBold),
     Font(R.font.roboto_bold, FontWeight.Bold)
 )
+object NestoryTypography {
+    val DisplaySummary = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 28.sp
+    )
 
-val Typography = Typography(
-    displayLarge = TextStyle(
+    val ScreenTitle = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 32.sp
-    ),
-    titleLarge = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
-    ),
-    titleMedium = TextStyle(
+        fontSize = 22.sp
+    )
+
+    val ItemName = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.15.sp
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    ),
-    bodyMedium = TextStyle(
+        fontSize = 18.sp
+    )
+
+    val Description = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        lineHeight = 20.sp,
-        letterSpacing = 0.25.sp
-    ),
-    labelSmall = TextStyle(
-        fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
+        color = GrayText
     )
+
+    val StatusLabel = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 11.sp
+    )
+}
+
+val Typography = Typography(
+    displayLarge = NestoryTypography.DisplaySummary,
+    titleLarge = NestoryTypography.ScreenTitle,
+    titleMedium = NestoryTypography.ItemName,
+    bodyMedium = NestoryTypography.Description,
+    labelSmall = NestoryTypography.StatusLabel
 )

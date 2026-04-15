@@ -16,17 +16,22 @@ data class BoxEntity(
     val syncId: String,
 
     @ColumnInfo(name = "box_name")
-    val boxName: String
+    val boxName: String,
+
+    @ColumnInfo(name = "icon")
+    val icon: String
 )
 
 fun BoxEntity.toDomain() = Box(
     id = id,
     syncId = syncId,
-    boxName = boxName
+    boxName = boxName,
+    icon = icon
 )
 
 fun Box.toEntity() = BoxEntity(
     id = id,
     syncId = syncId,
-    boxName = boxName
+    boxName = boxName,
+    icon = icon
 )
