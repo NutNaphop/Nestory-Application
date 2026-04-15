@@ -26,6 +26,7 @@ import com.naphop.nestory.data.local.EmojiProvider
 import com.naphop.nestory.feature.home.component.ScreenHeader
 import com.naphop.nestory.ui.components.NestoryCard
 import com.naphop.nestory.ui.components.inventory.InventoryItemCard
+import com.naphop.nestory.ui.components.inventory.SwipeableInventoryItem
 import com.naphop.nestory.ui.theme.NestoryDimens
 import com.naphop.nestory.ui.theme.NestoryTheme
 import com.naphop.nestory.ui.theme.NestoryTypography
@@ -157,12 +158,14 @@ fun ExpiredSoonSection() {
             )
         }
 
-        InventoryItemCard(
+        SwipeableInventoryItem(
             name = "KU MILK",
             quantity = 1,
             dueDate = "25 Apr",
             emoji = EmojiProvider.allEmojis.first(),
             status = StatusBadge.SOON,
+            onEdit = {},
+            onDelete = {}
         )
 
     }
