@@ -20,4 +20,5 @@ object NestoryDimens {
     val RadiusSmall = 8.dp
     val RadiusMedium = 12.dp
     val RadiusLarge = 16.dp
+    val RadiusExtraLarge = 20.dp
 }

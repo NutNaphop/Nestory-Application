@@ -4,69 +4,93 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.naphop.nestory.data.local.EmojiProvider
-import com.naphop.nestory.ui.theme.NavyDark
-import com.naphop.nestory.ui.theme.NestoryIcons
+import androidx.compose.ui.graphics.Color
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import com.naphop.nestory.navigation.NestoryNavGraph
+import com.naphop.nestory.ui.components.NestoryNavigationBar
+import com.naphop.nestory.ui.components.NestoryNavigationRail
 import com.naphop.nestory.ui.theme.NestoryTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            val windowSizeClass = calculateWindowSizeClass(this)
             NestoryTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                MainScreen(windowWidthSizeClass = windowSizeClass.widthSizeClass)
             }
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.padding(16.dp)) {
-        Text(
-            text = "Nestory App (Roboto Bold)",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.primary
-        )
+fun MainScreen(
+    windowWidthSizeClass: WindowWidthSizeClass,
+    navController: NavHostController = rememberNavController()
+) {
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
-        Text(
-            text = "This is a test of your custom theme.",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.secondary
-        )
 
-        IconButton(onClick = {}) {
-            Icon(
-                painter = NestoryIcons.Increase,
-                contentDescription = "Increase",
-                tint = NavyDark
+    val useNavRail = windowWidthSizeClass != WindowWidthSizeClass.Compact
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        if (useNavRail) {
+            NestoryNavigationRail(
+                currentRoute = currentRoute,
+                onNavigateClick = { route ->
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             )
         }
-    }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    NestoryTheme {
-        Greeting("Android")
+        Scaffold(
+            bottomBar = {
+                if (!useNavRail) {
+                    NestoryNavigationBar(
+                        currentRoute = currentRoute,
+                        onNavigateClick = { route ->
+                            navController.navigate(route) {
+                                popUpTo(navController.graph.startDestinationId) { saveState = true }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    )
+                }
+            }
+        ) { innerPadding ->
+            Surface(
+                color = Color.Transparent,
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                NestoryNavGraph(navController)
+            }
+        }
     }
 }
