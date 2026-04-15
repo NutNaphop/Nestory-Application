@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.naphop.nestory.R
+import com.naphop.nestory.feature.home.HomeScreen
 import com.naphop.nestory.navigation.NavigationDestination
 
 private const val ROUTE_NAME = "home_graph"
@@ -19,7 +20,7 @@ fun NavGraphBuilder.homeGraph(
         route = ROUTE_NAME
     ){
         composable(route = Home.route){
-            Text("HomeScreen")
+            HomeScreen()
         }
     }
 }

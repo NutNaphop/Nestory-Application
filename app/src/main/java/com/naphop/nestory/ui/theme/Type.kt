@@ -16,32 +16,73 @@ val RobotoFontFamily = FontFamily(
     Font(R.font.roboto_semibold, FontWeight.SemiBold),
     Font(R.font.roboto_bold, FontWeight.Bold)
 )
+
 object NestoryTypography {
-    val DisplaySummary = TextStyle(
+    // Display/Large - 36/40
+    val DisplayLarge = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 28.sp
+        fontSize = 36.sp,
+        lineHeight = 40.sp
     )
 
-    val ScreenTitle = TextStyle(
+    // Header/Large - 24/30
+    val HeaderLarge = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Bold,
-        fontSize = 22.sp
+        fontSize = 24.sp,
+        lineHeight = 30.sp
     )
 
-    val ItemName = TextStyle(
+    // Title/Medium - 18/20
+    val TitleMedium = TextStyle(
         fontFamily = RobotoFontFamily,
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 18.sp,
+        lineHeight = 20.sp
     )
 
-    val Description = TextStyle(
+    // Body/Large - 16/24
+    val BodyLarge = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    )
+
+    // Body/Medium - 14/20
+    val BodyMedium = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 14.sp,
-        color = GrayText
+        lineHeight = 20.sp
     )
 
+    // Label/Header - 14/20
+    val LabelHeader = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 14.sp,
+        lineHeight = 20.sp
+    )
+
+    // Label/Input - 16/24
+    val LabelInput = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Medium,
+        fontSize = 16.sp,
+        lineHeight = 24.sp
+    )
+
+    // Label/Small - 12/16
+    val LabelSmall = TextStyle(
+        fontFamily = RobotoFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 16.sp
+    )
+    
+    // StatusLabel - 11sp Bold
     val StatusLabel = TextStyle(
         fontFamily = RobotoFontFamily,
         fontWeight = FontWeight.Bold,
@@ -50,9 +91,11 @@ object NestoryTypography {
 }
 
 val Typography = Typography(
-    displayLarge = NestoryTypography.DisplaySummary,
-    titleLarge = NestoryTypography.ScreenTitle,
-    titleMedium = NestoryTypography.ItemName,
-    bodyMedium = NestoryTypography.Description,
-    labelSmall = NestoryTypography.StatusLabel
+    displayLarge = NestoryTypography.DisplayLarge,
+    headlineMedium = NestoryTypography.HeaderLarge,
+    titleMedium = NestoryTypography.TitleMedium,
+    bodyLarge = NestoryTypography.BodyLarge,
+    bodyMedium = NestoryTypography.BodyMedium,
+    labelLarge = NestoryTypography.LabelHeader,
+    labelSmall = NestoryTypography.LabelSmall
 )
