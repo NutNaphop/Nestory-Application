@@ -17,7 +17,7 @@ import com.naphop.nestory.domain.model.Inventory
             entity = BoxEntity::class,
             parentColumns = ["id"],
             childColumns = ["box_group"],
-            onDelete = ForeignKey.CASCADE
+            onDelete = ForeignKey.SET_NULL
         ),
         ForeignKey(
             entity = CategoryEntity::class,
@@ -48,7 +48,7 @@ data class InventoryEntity(
     val category: Int,
 
     @ColumnInfo(name = "box_group")
-    val boxGroup: Int,
+    val boxGroup: Int?,
 
     @ColumnInfo(name = "due_date")
     val dueDate: Long?,
