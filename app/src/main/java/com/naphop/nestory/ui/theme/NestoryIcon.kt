@@ -35,6 +35,7 @@ object NestoryIcons {
     val Delete @Composable get() = painterResource(R.drawable.ic_delete)
     val Save @Composable get() = painterResource(R.drawable.ic_bt_save)
     val Cancel @Composable get() = painterResource(R.drawable.ic_cancel)
+    val Back @Composable get() = painterResource(R.drawable.ic_back)
 
     // Other UI Icons
     val Question @Composable get() = painterResource(R.drawable.ic_popup_question)

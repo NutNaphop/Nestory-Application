@@ -18,6 +18,7 @@ fun NestoryNavGraph(
         startDestination = "home_graph",
     ) {
         homeGraph(
+            navController = navController,
             onNavigateToDetail = {
 
             },

@@ -1,5 +1,6 @@
 package com.naphop.nestory.feature.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import com.naphop.nestory.ui.theme.dropCard
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    onViewClick: () -> Unit = {},
     onNavigateToDetail: () -> Unit = {}
 ) {
     Surface(
@@ -56,7 +58,9 @@ fun HomeScreen(
             Spacer(modifier = Modifier.height(33.dp))
             SummaryCard()
             Spacer(modifier = Modifier.height(33.dp))
-            ExpiredSoonSection()
+            ExpiredSoonSection(
+                onViewClick = onViewClick
+            )
         }
     }
 }
@@ -135,7 +139,9 @@ fun SummaryCard() {
 }
 
 @Composable
-fun ExpiredSoonSection() {
+fun ExpiredSoonSection(
+    onViewClick: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.fillMaxWidth()
@@ -150,7 +156,12 @@ fun ExpiredSoonSection() {
                 color = MaterialTheme.colorScheme.onBackground
             )
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(
+                        enabled = true,
+                        onClick = onViewClick
+                    ),
                 textAlign = TextAlign.End,
                 text = "VIew All",
                 style = MaterialTheme.typography.bodyLarge,
