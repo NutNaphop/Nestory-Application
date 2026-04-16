@@ -9,12 +9,15 @@ import com.naphop.nestory.data.local.entity.CategoryEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface CategoryDao{
+interface CategoryDao {
     @Query("SELECT * FROM category")
-    fun getAllCategoryItems() : Flow<List<CategoryEntity>>
+    fun getAllCategoryItems(): Flow<List<CategoryEntity>>
+
+    @Query("SELECT * FROM category")
+    suspend fun getAllCategoryItemsOnce(): List<CategoryEntity>
 
     @Query(value = "SELECT * FROM category WHERE id = :categoryId")
-    suspend fun getCategoryItemById(categoryId: Int) : CategoryEntity?
+    suspend fun getCategoryItemById(categoryId: Int): CategoryEntity?
 
     @Insert
     suspend fun insertCategoryItem(categoryEntity: CategoryEntity)

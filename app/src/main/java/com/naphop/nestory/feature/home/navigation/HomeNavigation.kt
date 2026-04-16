@@ -12,7 +12,7 @@ import com.naphop.nestory.navigation.NavigationDestination
 
 private const val HOME_GRAPH_ROUTE = "home_graph"
 private const val HOME_ROUTE = "home"
-private const val EXPIRING_ROUTE = "home_expiring" // เปลี่ยนให้ไม่ซ้ำ
+private const val EXPIRING_ROUTE = "home_expiring"
 
 fun NavController.navigateToExpirationList() {
     this.navigate(EXPIRING_ROUTE)

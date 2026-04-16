@@ -2,6 +2,7 @@ package com.naphop.nestory.feature.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,12 +10,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -22,51 +24,82 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naphop.nestory.R
-import com.naphop.nestory.data.local.EmojiProvider
+import com.naphop.nestory.domain.model.Inventory
+import com.naphop.nestory.domain.model.getExpirationStatus
 import com.naphop.nestory.feature.home.component.ScreenHeader
 import com.naphop.nestory.ui.components.NestoryCard
-import com.naphop.nestory.ui.components.inventory.InventoryItemCard
 import com.naphop.nestory.ui.components.inventory.SwipeableInventoryItem
+import com.naphop.nestory.ui.mapper.toBadgeType
+import com.naphop.nestory.ui.mapper.toShortDate
 import com.naphop.nestory.ui.theme.NestoryDimens
 import com.naphop.nestory.ui.theme.NestoryTheme
 import com.naphop.nestory.ui.theme.NestoryTypography
-import com.naphop.nestory.ui.theme.StatusBadge
 import com.naphop.nestory.ui.theme.dropCard
+import com.naphop.nestory.util.UiState
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     onViewClick: () -> Unit = {},
-    onNavigateToDetail: () -> Unit = {}
+    onNavigateToDetail: () -> Unit = {},
+    viewModel: HomeScreenViewModel = koinViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     Surface(
-        modifier = modifier
-            .fillMaxSize()
-            .statusBarsPadding()
-            .padding(horizontal = 16.dp),
+        modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            ScreenHeader(
-                icon = painterResource(R.drawable.ic_nav_home_active),
-                title = "Good Morning!",
-                description = "Everything is in its place"
-            )
-            Spacer(modifier = Modifier.height(33.dp))
-            SummaryCard()
-            Spacer(modifier = Modifier.height(33.dp))
-            ExpiredSoonSection(
-                onViewClick = onViewClick
-            )
+        when (val state = uiState) {
+            is UiState.Loading -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    CircularProgressIndicator()
+                }
+            }
+            is UiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = "Something went wrong: ${state.message}", color = MaterialTheme.colorScheme.error)
+                }
+            }
+            is UiState.Success -> {
+                val data = state.data
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    ScreenHeader(
+                        icon = painterResource(R.drawable.ic_nav_home_active),
+                        title = "Good Morning!",
+                        description = "Everything is in its place"
+                    )
+                    Spacer(modifier = Modifier.height(33.dp))
+                    SummaryCard(
+                        countItem = data.countItem,
+                        countExpiring = data.countExpiring,
+                        countBox = data.countBox,
+                        countCategory = data.countCategory
+                    )
+                    Spacer(modifier = Modifier.height(33.dp))
+                    ExpiredSoonSection(
+                        items = data.expiredItems,
+                        onViewClick = onViewClick
+                    )
+                }
+            }
         }
     }
 }
 
 @Composable
-fun SummaryCard() {
+fun SummaryCard(
+    countItem: Int,
+    countExpiring: Int,
+    countBox: Int,
+    countCategory: Int
+) {
     NestoryCard(
         modifier = Modifier
             .fillMaxWidth()
@@ -88,7 +121,7 @@ fun SummaryCard() {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "48",
+                    text = countItem.toString(),
                     style = NestoryTypography.DisplayLarge,
                     color = MaterialTheme.colorScheme.onPrimary,
                 )
@@ -108,17 +141,17 @@ fun SummaryCard() {
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
-                        text = "3",
+                        text = countExpiring.toString(),
                         style = NestoryTypography.BodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
-                    Text(text = "category", style = NestoryTypography.BodyLarge)
+                    Text(text = "Expiring Soon", style = NestoryTypography.BodyLarge)
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
-                        "3",
+                        countBox.toString(),
                         style = NestoryTypography.BodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     Text("Boxes", style = NestoryTypography.BodyLarge)
@@ -128,7 +161,7 @@ fun SummaryCard() {
                     horizontalArrangement = Arrangement.spacedBy(5.dp)
                 ) {
                     Text(
-                        "3",
+                        countCategory.toString(),
                         style = NestoryTypography.BodyLarge.copy(fontWeight = FontWeight.Bold)
                     )
                     Text("Categories", style = NestoryTypography.BodyLarge)
@@ -140,6 +173,7 @@ fun SummaryCard() {
 
 @Composable
 fun ExpiredSoonSection(
+    items: List<Inventory>,
     onViewClick: () -> Unit
 ) {
     Column(
@@ -147,45 +181,55 @@ fun ExpiredSoonSection(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = "Expiring Soon",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
+                fontWeight = FontWeight.Bold
             )
             Text(
                 modifier = Modifier
-                    .weight(1f)
-                    .clickable(
-                        enabled = true,
-                        onClick = onViewClick
-                    ),
+                    .clickable(onClick = onViewClick)
+                    .padding(8.dp),
                 textAlign = TextAlign.End,
-                text = "VIew All",
+                text = "View All",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.primary
             )
         }
-
-        SwipeableInventoryItem(
-            name = "KU MILK",
-            quantity = 1,
-            dueDate = "25 Apr",
-            emoji = EmojiProvider.allEmojis.first(),
-            status = StatusBadge.SOON,
-            onEdit = {},
-            onDelete = {}
-        )
-
+        
+        if (items.isEmpty()) {
+            Text(
+                text = "No items expiring soon 🎉",
+                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                textAlign = TextAlign.Center,
+                style = NestoryTypography.BodyMedium
+            )
+        } else {
+            items.forEach { item ->
+                SwipeableInventoryItem(
+                    name = item.name,
+                    quantity = item.amount,
+                    dueDate = item.dueDate?.toShortDate() ?: "",
+                    emoji = item.category?.icon ?: "📦",
+                    status = item.getExpirationStatus(currentTime = System.currentTimeMillis())
+                        .toBadgeType(),
+                    onEdit = {},
+                    onDelete = {}
+                )
+            }
+        }
     }
 }
 
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    NestoryTheme() {
+    NestoryTheme {
         Surface(
             modifier = Modifier.fillMaxWidth(),
             color = MaterialTheme.colorScheme.background

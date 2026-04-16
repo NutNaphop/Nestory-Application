@@ -81,7 +81,9 @@ fun InventoryItemCard(
     showShadow: Boolean = true
 ) {
     val cardModifier = if (showShadow) {
-        modifier.fillMaxWidth().dropCard()
+        modifier
+            .fillMaxWidth()
+            .dropCard()
     } else {
         modifier.fillMaxWidth()
     }
@@ -178,7 +180,6 @@ fun SwipeableInventoryItem(
         modifier = modifier
             .fillMaxWidth()
             .height(IntrinsicSize.Min)
-            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = Modifier
@@ -195,7 +196,12 @@ fun SwipeableInventoryItem(
                     .clickable { onEdit() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(painter = NestoryIcons.Edit, contentDescription = "Edit", tint = NavyDark, modifier = Modifier.size(24.dp))
+                Icon(
+                    painter = NestoryIcons.Edit,
+                    contentDescription = "Edit",
+                    tint = NavyDark,
+                    modifier = Modifier.size(24.dp)
+                )
             }
             Box(
                 modifier = Modifier
@@ -205,7 +211,12 @@ fun SwipeableInventoryItem(
                     .clickable { onDelete() },
                 contentAlignment = Alignment.Center
             ) {
-                Icon(painter = NestoryIcons.Delete, contentDescription = "Delete", tint = NavyDark, modifier = Modifier.size(24.dp))
+                Icon(
+                    painter = NestoryIcons.Delete,
+                    contentDescription = "Delete",
+                    tint = NavyDark,
+                    modifier = Modifier.size(24.dp)
+                )
             }
         }
 
