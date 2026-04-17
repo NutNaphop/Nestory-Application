@@ -8,6 +8,7 @@ import com.naphop.nestory.domain.model.getExpirationStatus
 import com.naphop.nestory.domain.repository.BoxRepository
 import com.naphop.nestory.domain.repository.CategoryRepository
 import com.naphop.nestory.domain.repository.InventoryRepository
+import com.naphop.nestory.ui.mapper.toUserMessage
 import com.naphop.nestory.util.UiState
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,12 +28,12 @@ class HomeScreenViewModel(
     private val inventoryRepository: InventoryRepository,
     private val boxRepository: BoxRepository,
     private val categoryRepository: CategoryRepository
-): ViewModel(){
+) : ViewModel() {
 
     val uiState: StateFlow<UiState<HomeScreenUiState>> = combine(
-        inventoryRepository.getAllInventories(), 
-        boxRepository.getAllBoxes(),   
-        categoryRepository.getAllCategories() 
+        inventoryRepository.getAllInventories(),
+        boxRepository.getAllBoxes(),
+        categoryRepository.getAllCategories()
     ) { items, boxes, categories ->
         val currentTime = System.currentTimeMillis()
         val expiringSoon = items.filter {
@@ -50,7 +51,7 @@ class HomeScreenViewModel(
             )
         ) as UiState<HomeScreenUiState>
     }.catch { e ->
-        emit(UiState.Error(e.message))
+        emit(UiState.Error(e.toUserMessage()))
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),

@@ -89,7 +89,9 @@ fun MainScreen(
                 color = Color.Transparent,
                 modifier = Modifier.padding(innerPadding)
             ) {
-                NestoryNavGraph(navController)
+                NestoryNavGraph(
+                    navController = navController
+                )
             }
         }
     }

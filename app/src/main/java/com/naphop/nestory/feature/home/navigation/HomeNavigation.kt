@@ -1,5 +1,6 @@
 package com.naphop.nestory.feature.home.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -44,6 +45,7 @@ fun NavGraphBuilder.homeGraph(
         }
     }
 }
+
 object Home : NavigationDestination {
     override val activeIcon = R.drawable.ic_nav_home_active
     override val inActiveIcon = R.drawable.ic_nav_home_inactive
