@@ -2,7 +2,6 @@ package com.naphop.nestory.feature.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -29,7 +27,7 @@ import com.naphop.nestory.R
 import com.naphop.nestory.domain.model.Inventory
 import com.naphop.nestory.domain.model.getExpirationStatus
 import com.naphop.nestory.feature.home.component.ScreenHeader
-import com.naphop.nestory.ui.components.NestoryCard
+import com.naphop.nestory.ui.components.base.NestoryCard
 import com.naphop.nestory.ui.components.inventory.SwipeableInventoryItem
 import com.naphop.nestory.ui.mapper.toBadgeType
 import com.naphop.nestory.ui.mapper.toShortDate
@@ -37,7 +35,7 @@ import com.naphop.nestory.ui.theme.NestoryDimens
 import com.naphop.nestory.ui.theme.NestoryTheme
 import com.naphop.nestory.ui.theme.NestoryTypography
 import com.naphop.nestory.ui.theme.dropCard
-import com.naphop.nestory.util.UiState
+import com.naphop.nestory.util.NestoryUiStateHandler
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -53,45 +51,37 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         color = MaterialTheme.colorScheme.background
     ) {
-        when (val state = uiState) {
-            is UiState.Loading -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
-                }
-            }
-            is UiState.Error -> {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(text = "Something went wrong: ${state.message}", color = MaterialTheme.colorScheme.error)
-                }
-            }
-            is UiState.Success -> {
-                val data = state.data
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    ScreenHeader(
-                        icon = painterResource(R.drawable.ic_nav_home_active),
-                        title = "Good Morning!",
-                        description = "Everything is in its place"
-                    )
-                    Spacer(modifier = Modifier.height(33.dp))
-                    SummaryCard(
-                        countItem = data.countItem,
-                        countExpiring = data.countExpiring,
-                        countBox = data.countBox,
-                        countCategory = data.countCategory
-                    )
-                    Spacer(modifier = Modifier.height(33.dp))
-                    ExpiredSoonSection(
-                        items = data.expiredItems,
-                        onViewClick = onViewClick
-                    )
-                }
+        NestoryUiStateHandler(
+            uiState = uiState,
+            onRetry = {}
+        ) { data ->
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                ScreenHeader(
+                    icon = painterResource(R.drawable.ic_nav_home_active),
+                    title = "Good Morning!",
+                    description = "Everything is in its place"
+                )
+                Spacer(modifier = Modifier.height(33.dp))
+                SummaryCard(
+                    countItem = data.countItem,
+                    countExpiring = data.countExpiring,
+                    countBox = data.countBox,
+                    countCategory = data.countCategory
+                )
+                Spacer(modifier = Modifier.height(33.dp))
+                ExpiredSoonSection(
+                    items = data.expiredItems,
+                    onViewClick = onViewClick
+                )
             }
         }
+
     }
 }
+
 
 @Composable
 fun SummaryCard(
@@ -201,11 +191,13 @@ fun ExpiredSoonSection(
                 color = MaterialTheme.colorScheme.primary
             )
         }
-        
+
         if (items.isEmpty()) {
             Text(
                 text = "No items expiring soon 🎉",
-                modifier = Modifier.fillMaxWidth().padding(vertical = 32.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 32.dp),
                 textAlign = TextAlign.Center,
                 style = NestoryTypography.BodyMedium
             )
@@ -213,6 +205,7 @@ fun ExpiredSoonSection(
             items.forEach { item ->
                 SwipeableInventoryItem(
                     name = item.name,
+                    category = item.category?.name,
                     quantity = item.amount,
                     dueDate = item.dueDate?.toShortDate() ?: "",
                     emoji = item.category?.icon ?: "📦",

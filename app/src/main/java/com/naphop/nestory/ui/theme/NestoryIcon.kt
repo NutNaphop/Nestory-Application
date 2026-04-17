@@ -39,4 +39,5 @@ object NestoryIcons {
 
     // Other UI Icons
     val Question @Composable get() = painterResource(R.drawable.ic_popup_question)
+    val Danger @Composable get() = painterResource(R.drawable.ic_danger_triangle)
 }

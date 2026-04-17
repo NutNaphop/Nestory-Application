@@ -23,8 +23,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.naphop.nestory.navigation.NestoryNavGraph
 import com.naphop.nestory.navigation.navigationItem
-import com.naphop.nestory.ui.components.NestoryNavigationBar
-import com.naphop.nestory.ui.components.NestoryNavigationRail
+import com.naphop.nestory.ui.components.navigation.NestoryNavigationBar
+import com.naphop.nestory.ui.components.navigation.NestoryNavigationRail
 import com.naphop.nestory.ui.theme.NestoryTheme
 
 class MainActivity : ComponentActivity() {
@@ -49,7 +49,6 @@ fun MainScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val isTopLevelDestination = navigationItem.any { it.route == currentRoute }
-
     val useNavRail = windowWidthSizeClass != WindowWidthSizeClass.Compact
 
     Row(

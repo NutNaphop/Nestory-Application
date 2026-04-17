@@ -1,4 +1,4 @@
-package com.naphop.nestory.ui.components
+package com.naphop.nestory.ui.components.base
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box

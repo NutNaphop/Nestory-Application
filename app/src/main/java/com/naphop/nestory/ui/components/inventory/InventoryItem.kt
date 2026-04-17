@@ -36,7 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import com.naphop.nestory.ui.components.NestoryCard
+import com.naphop.nestory.ui.components.base.NestoryCard
 import com.naphop.nestory.ui.theme.ExpiredBg
 import com.naphop.nestory.ui.theme.GrayText
 import com.naphop.nestory.ui.theme.NavyDark

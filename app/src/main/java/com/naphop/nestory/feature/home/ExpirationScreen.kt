@@ -3,8 +3,12 @@ package com.naphop.nestory.feature.home
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -18,11 +22,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.naphop.nestory.domain.model.Inventory
 import com.naphop.nestory.domain.model.getExpirationStatus
-import com.naphop.nestory.ui.components.NestoryTopBar
+import com.naphop.nestory.ui.components.base.NestoryFilterRow
+import com.naphop.nestory.ui.components.navigation.NestoryTopBar
 import com.naphop.nestory.ui.components.inventory.SwipeableInventoryItem
 import com.naphop.nestory.ui.mapper.toBadgeType
 import com.naphop.nestory.ui.mapper.toShortDate
 import com.naphop.nestory.ui.theme.NestoryTypography
+import com.naphop.nestory.util.NestoryUiStateHandler
 import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -44,38 +50,55 @@ fun ExpirationScreen(
             )
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+        Column(
+            Modifier.padding(innerPadding)
         ) {
-            // 1. Already Expired section
-            if (uiState.expiredItems.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(text = "Already Expired")
-                }
-                items(items = uiState.expiredItems, key = { it.id }) {
-                    ExpirationItemRow(it, currentTime, onItemEdit, onItemDelete)
-                }
-            }
+            NestoryUiStateHandler(
+                uiState = uiState,
+                onRetry = {}
+            ) { data ->
+                Spacer(Modifier.height(16.dp))
+                NestoryFilterRow(
+                    categories = data.categoryList,
+                    selectedCategory = data.selectedCategory,
+                    onCategorySelected = { category ->
+                        viewModel.setSelectedCategory(category)
+                    }
+                )
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // 1. Already Expired section
+                    if (data.expiredItems.isNotEmpty()) {
+                        stickyHeader {
+                            SectionHeader(text = "Already Expired")
+                        }
+                        items(items = data.expiredItems, key = { it.id }) { inventory ->
+                            ExpirationItemRow(inventory, currentTime, onItemEdit, onItemDelete)
+                        }
+                    }
 
-            // 2. Expiring This Week section
-            if (uiState.expiringThisWeek.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(text = "Expiring This Week")
-                }
-                items(items = uiState.expiringThisWeek, key = { it.id }) {
-                    ExpirationItemRow(it, currentTime, onItemEdit, onItemDelete)
-                }
-            }
+                    // 2. Expiring This Week section
+                    if (data.expiringThisWeek.isNotEmpty()) {
+                        stickyHeader {
+                            SectionHeader(text = "Expiring This Week")
+                        }
+                        items(items = data.expiringThisWeek, key = { it.id }) { inventory ->
+                            ExpirationItemRow(inventory, currentTime, onItemEdit, onItemDelete)
+                        }
+                    }
 
-            // 3. Expiring This Month section
-            if (uiState.expiringThisMonth.isNotEmpty()) {
-                stickyHeader {
-                    SectionHeader(text = "Expiring This Month")
-                }
-                items(items = uiState.expiringThisMonth, key = { it.id }) {
-                    ExpirationItemRow(it, currentTime, onItemEdit, onItemDelete)
+                    // 3. Expiring This Month section
+                    if (data.expiringThisMonth.isNotEmpty()) {
+                        stickyHeader {
+                            SectionHeader(text = "Expiring This Month")
+                        }
+                        items(items = data.expiringThisMonth, key = { it.id }) { inventory ->
+                            ExpirationItemRow(inventory, currentTime, onItemEdit, onItemDelete)
+                        }
+                    }
                 }
             }
         }
@@ -103,6 +126,7 @@ private fun ExpirationItemRow(
 ) {
     SwipeableInventoryItem(
         name = item.name,
+        category = item.category?.name,
         quantity = item.amount,
         dueDate = item.dueDate?.toShortDate() ?: "",
         emoji = item.category?.icon ?: "📦",

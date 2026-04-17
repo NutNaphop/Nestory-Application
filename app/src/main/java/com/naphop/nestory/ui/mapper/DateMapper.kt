@@ -14,6 +14,6 @@ fun Long?.toExpiryDateString(): String {
 }
 
 fun Long.toShortDate(): String {
-    val dateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
     return dateFormat.format(Date(this))
 }

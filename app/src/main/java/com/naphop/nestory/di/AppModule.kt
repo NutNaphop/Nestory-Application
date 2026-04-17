@@ -41,6 +41,6 @@ val appModule = module {
     single<InventoryRepository> { InventoryRepositoryImpl(get()) }
     single<CategoryRepository> { CategoryRepositoryImpl(get()) }
 
-    viewModel { ExpirationViewModel(get()) }
+    viewModel { ExpirationViewModel(get(), get()) }
     viewModel { HomeScreenViewModel(get(), get(), get()) }
 }
