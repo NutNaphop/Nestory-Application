@@ -15,6 +15,8 @@ navigationCompose = "2.9.0"
 workmanager = "2.10.0"
 coroutinesTest = "1.9.0"
 foundation = "1.10.6"
+mockK = "1.14.9"
+turbine = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,6 +37,7 @@ androidx-compose-material3-window-size = { group = "androidx.compose.material3",
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
 
 coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutinesTest" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 # Room
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -44,6 +47,9 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 # Koin
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+
+#Mock
+mockK = { group = "io.mockk", name = "mockk", version.ref = "mockK" }
 
 # Navigation
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }

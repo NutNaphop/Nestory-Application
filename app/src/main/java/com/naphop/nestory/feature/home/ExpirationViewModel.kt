@@ -2,7 +2,6 @@ package com.naphop.nestory.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.naphop.nestory.domain.model.Category
 import com.naphop.nestory.domain.model.ExpirationStatus
 import com.naphop.nestory.domain.model.Inventory
 import com.naphop.nestory.domain.model.getExpirationStatus
@@ -26,16 +25,14 @@ data class ExpirationUiState(
 )
 
 class ExpirationViewModel(
-    private val repository: InventoryRepository,
+    private val inventoryRepository: InventoryRepository,
     private val categoryRepository: CategoryRepository
 ) : ViewModel() {
 
     private val _selectedCategory = MutableStateFlow("All")
-    private val _inventoryItems = repository.getAllInventories()
-    private val _categoryItems = categoryRepository.getAllCategories()
 
     val uiState: StateFlow<UiState<ExpirationUiState>> = combine(
-        repository.getAllInventories(),
+        inventoryRepository.getAllInventories(),
         _selectedCategory,
         categoryRepository.getAllCategories()
     ) { items, selectedCategory, categoryItems ->
@@ -47,11 +44,12 @@ class ExpirationViewModel(
             items.filter { it.category?.name == selectedCategory }
         }
 
-        val displayCategory = listOf<String>("All") + categoryItems.map { it.name }
+        val displayCategory = listOf("All") + categoryItems.map { it.name }
+        
         UiState.Success(
             ExpirationUiState(
                 selectedCategory = selectedCategory,
-                displayCategory,
+                categoryList = displayCategory,
                 expiredItems = filteredItems.filter { it.getExpirationStatus(currentTime) == ExpirationStatus.EXPIRED },
                 expiringThisWeek = filteredItems.filter { it.getExpirationStatus(currentTime) == ExpirationStatus.THIS_WEEK },
                 expiringThisMonth = filteredItems.filter { it.getExpirationStatus(currentTime) == ExpirationStatus.THIS_MONTH },
@@ -60,7 +58,7 @@ class ExpirationViewModel(
         ) as UiState<ExpirationUiState>
     }
         .catch {
-            UiState.Error(it.message)
+            emit(UiState.Error(it.message))
         }
         .stateIn(
             scope = viewModelScope,
