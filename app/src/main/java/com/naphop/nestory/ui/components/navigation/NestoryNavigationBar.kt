@@ -1,4 +1,4 @@
-package com.naphop.nestory.ui.components
+package com.naphop.nestory.ui.components.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

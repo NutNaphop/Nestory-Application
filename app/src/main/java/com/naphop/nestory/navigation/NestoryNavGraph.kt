@@ -1,5 +1,6 @@
 package com.naphop.nestory.navigation
 
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -18,6 +19,7 @@ fun NestoryNavGraph(
         startDestination = "home_graph",
     ) {
         homeGraph(
+            navController = navController,
             onNavigateToDetail = {
 
             },

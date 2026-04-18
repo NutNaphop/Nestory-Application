@@ -6,6 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
@@ -76,6 +77,27 @@ class NavigationTesting {
         composeTestRule.onNodeWithContentDescription(expectedRoute).assertIsSelected()
     }
 
+
+    @Test
+    fun fromHomeScreen_clickExpiringViewAll_navigatesToExpirationScreen(){
+        setUpScreen(WindowWidthSizeClass.Compact)
+        composeTestRule
+            .onNodeWithText("View All")
+            .performClick()
+
+        val route = navController.currentBackStackEntry?.destination?.route
+        assertEquals("home_expiring",route)
+    }
+
+    @Test
+    fun fromHomeScreen_inExpirationScreen_navigationBarShouldNotBeDisplayed(){
+        setUpScreen(WindowWidthSizeClass.Compact)
+        composeTestRule.onNodeWithText("View All").performClick()
+
+        composeTestRule
+            .onNodeWithContentDescription("home")
+            .assertDoesNotExist()
+    }
     private fun composeTestRoute(expectedRoute: String) {
         composeTestRule.onNodeWithContentDescription(label = expectedRoute).performClick()
         val actualRoute = navController.currentBackStackEntry?.destination?.route
